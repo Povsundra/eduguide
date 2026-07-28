@@ -1,0 +1,113 @@
+# =============================================================================
+# EduGuide Docker Compose Orchestration
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------------------
+  # Nginx Reverse Proxy
+  # -------------------------------------------------------------------------
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - eduguide-net
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # FastAPI Backend
+  # -------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # Exposing the port is not strictly necessary since nginx routes internally,
+    # but useful for direct debugging on localhost:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    networks:
+      - eduguide-net
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # React Frontend
+  # -------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    # Vite API Base URL must point to the reverse proxy endpoint (port 80)
+    # when running inside docker-compose
+    environment:
+      - VITE_API_BASE_URL=http://localhost:80/api/v1
+    networks:
+      - eduguide-net
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # PostgreSQL Database (Relational Data)
+  # -------------------------------------------------------------------------
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: eduguide
+      POSTGRES_PASSWORD: pass_123
+      POSTGRES_DB: eduguide_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - eduguide-net
+
+  # -------------------------------------------------------------------------
+  # Neo4j Graph Database (Graph Data)
+  # -------------------------------------------------------------------------
+  neo4j:
+    image: neo4j:5-community
+    restart: always
+    environment:
+      NEO4J_AUTH: neo4j/eduguide_password
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*
+    ports:
+      - "7474:7474" # HTTP
+      - "7687:7687" # Bolt
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - eduguide-net
+
+  # -------------------------------------------------------------------------
+  # Redis (Cache / Celery Broker)
+  # -------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - eduguide-net
+
+networks:
+  eduguide-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  neo4j_data:
+  redis_data:

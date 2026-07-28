@@ -1,0 +1,5 @@
+/* EduGuide — Global Styles
+ * TailwindCSS v4 uses CSS-first configuration via @import.
+ * All utility classes are available globally through this file.
+ */
+@import "tailwindcss";
