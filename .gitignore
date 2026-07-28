@@ -186,3 +186,12 @@ temp/
 *.swp
 *.swo
 *~
+
+# -----------------------------------------------------------------------------
+# Private Project Documentation & Specs
+# -----------------------------------------------------------------------------
+# Ignore AI instructions and project specs if this is a public repository
+.ai/
+docs/
+Literature/
+tasks/
