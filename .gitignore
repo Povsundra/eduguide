@@ -188,10 +188,11 @@ temp/
 *~
 
 # -----------------------------------------------------------------------------
-# Private Project Documentation & Specs
+# Private Project Documentation, Specs & Data
 # -----------------------------------------------------------------------------
-# Ignore AI instructions and project specs if this is a public repository
+# Ignore AI instructions, project specs, and knowledge graph data
 .ai/
 docs/
+knowledge/
 Literature/
 tasks/
