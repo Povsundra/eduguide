@@ -12,6 +12,19 @@ EduGuide is an AI-powered educational guidance platform tailored for Cambodia. I
   - Redis (Caching, Celery Broker for async AI tasks)
 - **Infrastructure:** Docker & Docker Compose
 
+## Project Status
+
+EduGuide is being developed in a phased approach. The current completed phases are:
+- [x] **Phase 01:** Project Foundation & Development Environment
+- [x] **Phase 02:** Database Foundation (PostgreSQL setup, Alembic)
+- [x] **Phase 03:** Knowledge Graph Design (Neo4j Schemas & Constraints)
+- [x] **Phase 04:** Data Ingestion Pipeline (Parsing, Validation, Entity Extraction, Loading)
+- [x] **Phase 05:** Retrieval Foundation & Indexing (Graph/Vector integration, Hybrid Orchestrator, Ranking)
+
+**Next Phase:** Phase 06 (Generative Response Engine / RAG)
+
+For detailed granular progress, check `docs/project_state_progress.md`.
+
 ## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running.
