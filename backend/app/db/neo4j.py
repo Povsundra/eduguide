@@ -1,5 +1,5 @@
 import logging
-from typing import AsyncGenerator, Any
+from typing import Any, AsyncGenerator
 
 from neo4j import AsyncDriver, AsyncGraphDatabase
 
